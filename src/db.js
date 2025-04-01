@@ -9,3 +9,4 @@ export const connection = createPool({
     password : DB_PASSWORD,
     database : DB
 })
+

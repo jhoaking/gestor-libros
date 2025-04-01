@@ -1,7 +1,7 @@
 
 import {connection} from '../db.js'
 
-export class usuariosModel{
+export class authoresModel{
     static   obtenerUsers = async () =>{
         try {
             const query = 'SELECT * FROM authors';
@@ -14,7 +14,7 @@ export class usuariosModel{
         }
     }
 
-    static getAuthorById = async ({id}) =>{
+    static getAuthorById = async (id) =>{
         try {
             const query = 'SELECT * FROM authors WHERE id = ?';
             const [result] = await connection.query(query,[id])
@@ -42,11 +42,11 @@ export class usuariosModel{
             const query = 'DELETE FROM authors WHERE id = ?';
             const [result] = await connection.query(query,[id]);
 
-            if(result.affectedRows == 0){
+            if(result.affectedRows === 0){
                 throw new Error ('no se elimino el autor de la DB');
             }
 
-            return result[0];
+            return { message: "Autor eliminado correctamente" };
         } catch (error) {
             console.error('error al eliminar  authores  en el modelo',error);
             throw error;
@@ -55,14 +55,18 @@ export class usuariosModel{
 
     static actualizarAuthores = async ({name,birthdate},id) =>{
         try {
-            const [rows] = this.getAuthorById(id);
-            if(rows.affectedRows == 0){
+            const [rows] =  await this.getAuthorById(id);
+            if(rows.length == 0){
                 throw new Error ('no se actualizo el autor de la DB');
             }
 
             const query = 'UPDATE authors SET name = ? , birthdate = ? WHERE id = ?';
 
-            const [result] = await connection.query(query,[name,birthdate,rows])
+            const [result] = await connection.query(query,[name,birthdate,id]);
+
+            if (result.affectedRows === 0) {
+                throw new Error("No se actualizó el autor en la DB");
+            }
             return result;
         } catch (error) {
             console.error('error al actualizar  authores  en el modelo',error);

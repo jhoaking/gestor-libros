@@ -1,7 +1,7 @@
 import express from 'express';
-
+import { autorRouter } from './routes/autores.routes.js';
 export const app = express();
 
-app.get('/', (req,res) =>{
-    res.send('hola mundo')
-})
+app.use(express.json());
+    
+app.use('/user',autorRouter);
