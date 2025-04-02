@@ -7,7 +7,7 @@ let personasPrueba ;
 
 beforeAll(() => {
     server = app.listen(4000); 
-    personasPrueba = {name : 'joaco', birthdata : '2025-09-06'};
+    personasPrueba = {name : 'joaco', birthdate : '2025-09-06'};
 });
 
 afterAll(async () => {
@@ -24,7 +24,8 @@ describe('GET /user', ()=>{
     })
 
     test('espera 200 si se encontro con id', async () =>{
-        const result = await request(app).get('/:id').send();
+        const  id= 1;
+        const result = await request(app).get(`/user/:${id}`).send();
         expect(result.status).toBe(200)
     })
 })
@@ -34,10 +35,16 @@ describe('POST /user', () =>{
         const result = await request(app).post('/user').send(personasPrueba)
         expect(result.status).toBe(201);
     })
+
+    test('espera que el  content-type: application/json en el encabezado', async () =>{
+        const res = await request(app).post('/user').send(personasPrueba);
+        expect(res.header['content-type']).toEqual(expect.stringContaining('json'))
+    })
     
     test('espera 201 si al crear esta con un id', async () =>{
-        const result = await request(app).post('/').send(personasPrueba);
-        expect (result.status).toBe(201)
-        expect(result.body.id).toBeDefined()
+        const result = await request(app).post('/user').send(personasPrueba);
+
+        expect (result.status).toBe(201);
+        expect(result.body.id).toBeDefined();
     })
 })

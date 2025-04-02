@@ -29,8 +29,9 @@ export class authoresModel{
         try {
             const query = 'INSERT INTO authors(name,birthdate) VALUES (?,?)';
             const [result] = await connection.query(query,[name,birthdate]);
-
-            return result.insertId;
+            
+            
+            return {id:result.insertId,name,birthdate};
         } catch (error) {
             console.error('error al agregar  authores  en el modelo',error);
             throw error;
