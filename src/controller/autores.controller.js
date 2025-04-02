@@ -27,11 +27,11 @@ export class autoresController{
         try {
             const vali = validarAutor(req.body);
             if(!vali.success){
-                return res.status(403).json({error : JSON.parse(vali.error.message)})
+                return res.status(400).json({error : JSON.parse(vali.error.message)})
             }
 
             const result = await authoresModel.agregarAuthor(vali.data);
-            res.status(200).json(result);
+            res.status(201).json(result);
         } catch (error) {
             return res.status(500).json({message : ' error al crear autores ',error:error.message})
         }
