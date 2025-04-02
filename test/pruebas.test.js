@@ -1,6 +1,7 @@
 import { app } from "../src/app.js";
 import request  from "supertest";
 import { connection } from "../src/db.js";
+import { number, string } from "zod";
 
 let server;
 let personasPrueba ;
@@ -24,9 +25,21 @@ describe('GET /user', ()=>{
     })
 
     test('espera 200 si se encontro con id', async () =>{
-        const  id= 1;
-        const result = await request(app).get(`/user/:${id}`).send();
+        const  id = 1;
+        const result = await request(app).get(`/user/${id}`).send();
         expect(result.status).toBe(200)
+    })
+
+    test('espera un 400 si el id no existe',async ()=>{
+        const id = 0;
+        const result = await request(app).get(`/user/${id}`).send();
+        expect(result.status).toBe(400);
+    })
+
+    test('espera un 400 si el id no es un entero', async()=>{
+        const id = 'as';
+        const result = await request(app).get(`/user/${id}`).send();
+        expect(result.status).toBe(400)
     })
 })
 

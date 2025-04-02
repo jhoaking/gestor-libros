@@ -14,9 +14,10 @@ export class autoresController{
         const {id} = req.params;
         try {
             const result = await authoresModel.getAuthorById(id);
-             if(!result){
+             if(result.length == 0){
                 return res.status(400).json({message :"no se encontro el autor"});
              }
+             
             res.status(200).json(result)
         } catch (error) {
             return res.status(500).json({message : ' error al obtener autores por id',error:error.message})
