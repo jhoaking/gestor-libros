@@ -14,6 +14,8 @@ export class authoresModel{
         }
     }
 
+  
+
     static getAuthorById = async (id) =>{
         try {
             const query = 'SELECT * FROM authors WHERE id = ?';

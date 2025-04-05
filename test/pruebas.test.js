@@ -1,14 +1,13 @@
 import { app } from "../src/app.js";
 import request  from "supertest";
 import { connection } from "../src/db.js";
-import { number, string } from "zod";
+
 
 let server;
-let personasPrueba ;
 
 beforeAll(() => {
     server = app.listen(4000); 
-    personasPrueba = {name : 'joaco', birthdate : '2025-09-06'};
+    
 });
 
 afterAll(async () => {
@@ -44,6 +43,9 @@ describe('GET /user', ()=>{
 })
 
 describe('POST /user', () =>{
+
+   let  personasPrueba = {name : 'joaco', birthdate : '2025-03-03'};
+
     test('espera 201 si se creo el usuario', async ()=>{
         const result = await request(app).post('/user').send(personasPrueba)
         expect(result.status).toBe(201);
@@ -59,5 +61,12 @@ describe('POST /user', () =>{
 
         expect (result.status).toBe(201);
         expect(result.body.id).toBeDefined();
+    })
+
+    test('espera 400 si crea  autor  duplicado ', async() =>{
+          await request(app).post('/user').send(personasPrueba);
+         const res = await request(app).post('/user').send(personasPrueba);
+        expect(res.status).toBe(400);
+
     })
 })

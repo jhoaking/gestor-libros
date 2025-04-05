@@ -31,7 +31,9 @@ export class autoresController{
                 return res.status(400).json({error : JSON.parse(vali.error.message)})
             }
 
+
             const result = await authoresModel.agregarAuthor(vali.data);
+          
             res.status(201).json(result);
         } catch (error) {
             return res.status(500).json({message : ' error al crear autores ',error:error.message})
