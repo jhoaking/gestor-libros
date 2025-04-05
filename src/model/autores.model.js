@@ -14,7 +14,16 @@ export class authoresModel{
         }
     }
 
-  
+    static getAuthorByName = async (name) => {
+        try {
+            const query = 'SELECT * FROM authors WHERE name = ?';
+            const [result] = await connection.query(query, [name]);
+            return result;
+        } catch (error) {
+            console.error('Error al obtener autor por nombre', error);
+            throw error;
+        }
+    };
 
     static getAuthorById = async (id) =>{
         try {
@@ -33,7 +42,7 @@ export class authoresModel{
             const [result] = await connection.query(query,[name,birthdate]);
             
             
-            return {id:result.insertId,name,birthdate};
+            return {id:result.insertId};
         } catch (error) {
             console.error('error al agregar  authores  en el modelo',error);
             throw error;

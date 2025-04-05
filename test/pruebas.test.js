@@ -47,7 +47,7 @@ describe('POST /user', () =>{
    let  personasPrueba = {name : 'joaco', birthdate : '2025-03-03'};
 
     test('espera 201 si se creo el usuario', async ()=>{
-        const result = await request(app).post('/user').send(personasPrueba)
+        const result = await request(app).post('/user').send({name : "juan",birthdate : '2025-03-03'})
         expect(result.status).toBe(201);
     })
 
@@ -57,7 +57,7 @@ describe('POST /user', () =>{
     })
     
     test('espera 201 si al crear esta con un id', async () =>{
-        const result = await request(app).post('/user').send(personasPrueba);
+        const result = await request(app).post('/user').send({name : "pepe", birthdate : "2024-04-03"});
 
         expect (result.status).toBe(201);
         expect(result.body.id).toBeDefined();

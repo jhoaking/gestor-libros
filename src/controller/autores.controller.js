@@ -31,6 +31,10 @@ export class autoresController{
                 return res.status(400).json({error : JSON.parse(vali.error.message)})
             }
 
+            const buscar = await authoresModel.getAuthorByName(vali.data.name);
+            if (buscar.length > 0) {  
+                return res.status(400).json({ message: "El autor ya se creó" });
+            }
 
             const result = await authoresModel.agregarAuthor(vali.data);
           
