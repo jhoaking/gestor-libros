@@ -10,7 +10,7 @@ export const validarAutor = (data) => {
     const result = autoresSchema.safeParse(data);
   
     if (!result.success) {
-      return { valid: false, errors: result.error.format() };
+      return { valid: false, errors: result.error.format()};
     }
     return { valid: true, data: result.data };
   };

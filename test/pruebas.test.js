@@ -40,6 +40,12 @@ describe('GET /user', ()=>{
         const result = await request(app).get(`/user/${id}`).send();
         expect(result.status).toBe(400)
     })
+
+    test('espera un 404 si al buscar por id no se encuentra el usuario', async ()=>{
+        const id = 999;
+        const res = await request(app).get(`/user${id}`).send();
+        expect(res.status).toBe(404);
+    })
 })
 
 describe('POST /user', () =>{
@@ -73,6 +79,6 @@ describe('POST /user', () =>{
         expect(res.status).toBe(400);
     })
    
-
+   
     
 })

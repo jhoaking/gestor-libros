@@ -14,8 +14,8 @@ export class autoresController{
         const {id} = req.params;
         try {
             const result = await authoresModel.getAuthorById(id);
-             if(result.length == 0){
-                return res.status(400).json({message :"no se encontro el autor"});
+             if(result.length === 0){
+                return res.status(400).json({message :"no se encontro el autor el id no existe"});
              }
              
             res.status(200).json(result)
@@ -30,7 +30,7 @@ export class autoresController{
             if(!vali.valid){
                 return res.status(400).json({error: vali.errors})
             }
-            
+
             const result = await authoresModel.agregarAuthor(vali.data);
             
             if(!result){
