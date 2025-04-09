@@ -27,16 +27,15 @@ export class autoresController{
     static createAutor = async (req,res) =>{
         try {
             const vali = validarAutor(req.body);
-            if(!vali.success){
-                return res.status(400).json({error : JSON.parse(vali.error.message)})
+            if(!vali.valid){
+                return res.status(400).json({error: vali.errors})
             }
             
-            const buscar = await authoresModel.getAuthorByName(vali.data.name);
-            if (buscar.length > 0) {  
-                 return res.status(400).json({ message: "El autor ya se creó" });
-            }
             const result = await authoresModel.agregarAuthor(vali.data);
             
+            if(!result){
+                return res.status(400).json({message : "no se agrego el autor "})
+            }  
           
            return res.status(201).json(result);
         } catch (error) {
@@ -62,10 +61,6 @@ export class autoresController{
         const {id} = req.params;
         try {
             const vali = validarAutor(req.body);
-            if(!vali.success){
-                return res.status(403).json({error : JSON.parse(vali.error.message)})
-            }
-
             const result = await authoresModel.actualizarAuthores(vali.data,id);
 
             res.status(200).json(result)

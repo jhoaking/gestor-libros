@@ -5,6 +5,13 @@ const autoresSchema = z.object({
     birthdate : z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
 })
 
-export const validarAutor = (input) =>{
-    return  autoresSchema.partial().safeParse(input);
-}
+
+export const validarAutor = (data) => {
+    const result = autoresSchema.safeParse(data);
+  
+    if (!result.success) {
+      return { valid: false, errors: result.error.format() };
+    }
+    return { valid: true, data: result.data };
+  };
+

@@ -63,12 +63,16 @@ describe('POST /user', () =>{
         expect(result.body.id).toBeDefined();
     })
 
-    test('espera 400 si crea  autor  duplicado ', async() =>{
-          await request(app).post('/user').send(personasPrueba);
-         const res = await request(app).post('/user').send(personasPrueba);
+    test('espera un 400 si no se mando un dato', async () =>{
+        const res = await request(app).post('/user').send({birthdate : "2006-09-02"});
         expect(res.status).toBe(400);
-
     })
+
+    test('espera 400 si la fecha no esta en su formato', async () =>{
+        const res = await request(app).post('/user').send({name : 'pepe', birthdate : 'abril'});
+        expect(res.status).toBe(400);
+    })
+   
 
     
 })

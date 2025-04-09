@@ -13,18 +13,7 @@ export class authoresModel{
             throw error;
         }
     }
-
-    static getAuthorByName = async (name) => {
-        try {
-            const query = 'SELECT * FROM authors WHERE name = ?';
-            const [result] = await connection.query(query, [name]);
-            return result;
-        } catch (error) {
-            console.error('Error al obtener autor por nombre', error);
-            throw error;
-        }
-    };
-
+    
     static getAuthorById = async (id) =>{
         try {
             const query = 'SELECT * FROM authors WHERE id = ?';
