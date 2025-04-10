@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { SALT_ROUNDS,SECRET_JWT_KEY } from "../config.js";
 
  
-export class usuario{
+export class usuarioModel{
     static createToken = async (user) =>{
         try {
             const token = jwt.sign(
@@ -54,7 +54,7 @@ export class usuario{
 
 
 
-    static getByEmail = async (email) =>{
+    static obtenerPorEmail = async (email) =>{
         try {
             const query = 'SELECT BIN_TO_UUID(user_id) as id , email,password from usuarios WHERE email = ?';
 
