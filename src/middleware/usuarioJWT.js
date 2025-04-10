@@ -3,7 +3,7 @@ import {SECRET_JWT_KEY} from '../config.js'
 
 export const authenticate = async (req,res,next) =>{
     try {
-        const token = req.access_token.cookie;
+        const token = req.cookies.access_token;
         if(!token){
             return res.status(400).json({message : "token no creado"});
         }

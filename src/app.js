@@ -8,5 +8,5 @@ app.use(express.json());
 app.use(cookieParser()); 
 
 
-app.use('/user',autorRouter);
+app.use('/autor',autorRouter);
 app.use('/user',routerUser);

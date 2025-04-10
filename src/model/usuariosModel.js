@@ -19,10 +19,12 @@ export class usuarioModel{
         }
     }
 
-    static hashearContra = async (password) =>{
+    static hashrContra = async (password) =>{
         try {
-            const hasshedPassword = bcrypt.hash(password,SALT_ROUNDS);
-            return hasshedPassword;
+            const hashedPassword =  await bcrypt.hash(password,Number(SALT_ROUNDS));
+           
+            
+            return hashedPassword;
         } catch (error) {
             console.error(error.message);
             throw new Error("error al hashear la password "); 
@@ -31,10 +33,10 @@ export class usuarioModel{
 
     static registerUser = async ({nombre,email,password}) =>{
         try {
-            const hashedPasswrod = this.hashearContra(password);
-            const query = "INSERT INTO usuarios(nombre,email,password)";
+            const hashedPasswrod = await this.hashrContra(password);
+            const query = "INSERT INTO usuarios(nombre,email,password) VALUES (?,?,?)";
 
-            const [result] = await connection.query(query,{nombre,email,hashedPasswrod});
+            const [result] = await connection.query(query,[nombre,email,hashedPasswrod]);
             return result;
         } catch (error) {
             console.error(error.message);
@@ -42,9 +44,9 @@ export class usuarioModel{
         }
     }
 
-    static compararContra = async (passwordUser, hashedaPassword) =>{
+    static compararContra = async ({passwordUser, hashedPassword}) =>{
         try {
-            const comparePassword = bcrypt.compare(passwordUser, hashedaPassword);
+            const comparePassword = bcrypt.compare(passwordUser, hashedPassword);
             return comparePassword;
         } catch (error) {
             console.error(error.message);
@@ -59,7 +61,7 @@ export class usuarioModel{
             const query = 'SELECT BIN_TO_UUID(user_id) as id , email,password from usuarios WHERE email = ?';
 
             const [result] = await connection.query(query,[email]);
-            if(!result){
+            if(!result === 0){
                 return null;
             }
 
@@ -70,11 +72,11 @@ export class usuarioModel{
         }
     }
 
-    static obtenerUsuario = async(id) =>{
+    static obtenerUsuario = async() =>{
         try {
-            const query = "SELECT BIN_TO_UUID(user_id)AS id , email,password FROM usuarios WHERE id = ?";
-            const [result] = await connection.query(query,[id]);
-            return result[0];
+            const query = "SELECT BIN_TO_UUID(user_id)AS id , email,password FROM usuarios";
+            const [result] = await connection.query(query);
+            return result;
         } catch (error) {
             console.error(error.message);
             throw new Error("error al obtener el usuario en la db   ");

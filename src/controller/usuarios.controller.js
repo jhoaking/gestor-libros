@@ -16,13 +16,12 @@ export class usuarioController{
             if(user){
                 res.status(400).json({message: "el usuario ya esta registrado"});
             }
-
-             await usuarioModel.register(nombre,email,password);
+            await usuarioModel.registerUser({nombre,email,password});
 
             res.status(200).json({message: "ya se registro con exito"});
-        } catch (error) {
+        } catch (error) { 
             console.error(error.message);
-            res.status(500).json(error.message)
+            res.status(500).json({message : "erro al registrar"}, error.message)
         }
     }
 
@@ -35,11 +34,11 @@ export class usuarioController{
             const user  =await usuarioModel.obtenerPorEmail(email);
             
 
-            if(!user){
+            if(!user){ 
                 return res.status(400).json({message: "necesitas registrarte primero"});
             }
 
-            const comparePassword = usuarioModel.comparePassword(password,user.password);
+            const comparePassword = usuarioModel.compararContra(password,user.password);
             if(!comparePassword){
                 return res.status(400).json({message: "contraseña invalida"});
             }
@@ -47,7 +46,7 @@ export class usuarioController{
             const token = await usuarioModel.createToken(user);
 
             res
-            .cookie('access_toekn',token, {
+            .cookie('access_token',token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "Strict",
@@ -75,6 +74,16 @@ export class usuarioController{
                 message: "bienvnido a la ruta protegida",
                 user: req.user
             })
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).json(error.message);
+        }
+    }
+
+    static getUser = async (req,res) =>{
+        try {
+            const result = await usuarioModel.obtenerUsuario();
+            res.status(200).json(result)
         } catch (error) {
             console.error(error.message);
             res.status(500).json(error.message);

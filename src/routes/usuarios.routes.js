@@ -8,5 +8,7 @@ routerUser.get('/logout',usuarioController.logout);
 routerUser.post('/register',usuarioController.register);
 routerUser.post('/login',usuarioController.login);
 routerUser.get('/protected', authenticate , usuarioController.protected);
+routerUser.get('/', usuarioController.getUser);
 
 
+     
