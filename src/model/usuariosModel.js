@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { SALT_ROUNDS,SECRET_JWT_KEY } from "../config.js";
 
-
+ 
 export class usuario{
     static createToken = async (user) =>{
         try {
