@@ -5,7 +5,7 @@ import { SALT_ROUNDS,SECRET_JWT_KEY } from "../config.js";
 
  
 export class usuarioModel{
-    static createToken = async (user) =>{
+    static createToken =  (user) =>{
         try {
             const token = jwt.sign(
                 {id:user.user_id,nombre : user.nombre, email : user.email},
@@ -26,7 +26,6 @@ export class usuarioModel{
             
             return hashedPassword;
         } catch (error) {
-            console.error(error.message);
             throw new Error("error al hashear la password "); 
         }
     }
@@ -39,14 +38,13 @@ export class usuarioModel{
             const [result] = await connection.query(query,[nombre,email,hashedPasswrod]);
             return result;
         } catch (error) {
-            console.error(error.message);
             throw new Error("error al registrar el user "); 
         }
     }
 
-    static compararContra = async (passwordUser, hashedPassword) =>{
+    static compararContra =  async (passwordUser, hashedPassword) =>{
         try {
-            const comparePassword = bcrypt.compare(passwordUser, hashedPassword);
+            const comparePassword = await bcrypt.compare(passwordUser, hashedPassword);
             return comparePassword;
         } catch (error) {
             console.error(error.message);
@@ -65,7 +63,7 @@ export class usuarioModel{
                 return null;
             }
 
-            return result;
+            return result[0];
         } catch (error) {
             console.error(error.message);
             throw new Error("error al comparar el email  algo esta mal  ");

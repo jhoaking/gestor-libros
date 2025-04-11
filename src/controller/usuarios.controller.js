@@ -5,22 +5,21 @@ export class usuarioController{
     static register = async (req,res) =>{
         try {
             const vali = validarUsuarioRegister(req.body);
-
+            if(!vali.valid){
+                return res.status(400).json({message: "error al validar"})
+            }
             const {nombre,email,password} = vali.data;
 
-            if(!password){
-                return res.status(400).json({message : "falta la contraseña"});
-            }
+          
             const user = await usuarioModel.obtenerPorEmail(email);
  
             if(user){
-                res.status(400).json({message: "el usuario ya esta registrado"});
+                return res.status(400).json({message: "el usuario ya esta registrado"});
             }
-            await usuarioModel.registerUser({nombre,email,password});
+                await usuarioModel.registerUser({nombre,email,password});
 
             res.status(201).json({message: "ya se registro con exito"});
         } catch (error) { 
-            console.error(error.message);
             res.status(500).json({message : "erro al registrar"}, error.message)
         }
     }
@@ -31,19 +30,19 @@ export class usuarioController{
 
             const {email,password} = vali.data;
 
-            const user  =await usuarioModel.obtenerPorEmail(email);
+            const user  = await usuarioModel.obtenerPorEmail(email);
             
 
             if(!user){ 
                 return res.status(400).json({message: "necesitas registrarte primero"});
             }
 
-            const comparePassword = usuarioModel.compararContra(password,user.password);
+            const comparePassword = await usuarioModel.compararContra(password,user.password);
             if(!comparePassword){
                 return res.status(400).json({message: "contraseña invalida"});
             }
 
-            const token = await usuarioModel.createToken(user);
+            const token =  usuarioModel.createToken(user);
 
             res
             .cookie('access_token',token, {
@@ -59,7 +58,7 @@ export class usuarioController{
         }
     }
 
-    static logout = (req,res) =>{
+    static logout = async (req,res) =>{
         res.clearCookie("access_token");
 
         return res.status(200).json({ message: "Logout exitoso" });
