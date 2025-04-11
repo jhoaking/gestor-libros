@@ -28,6 +28,10 @@ export class usuarioController{
         try {
             const vali = validarUsuarioLogin(req.body);
 
+            if(!vali.valid){
+                return res.status(400).json({message: "error al validar"})
+            }
+
             const {email,password} = vali.data;
 
             const user  = await usuarioModel.obtenerPorEmail(email);
@@ -51,7 +55,8 @@ export class usuarioController{
                 sameSite: "Strict",
                 maxAge: 1000 * 60 * 60 * 48
             })
-            .send({user,token});
+            .send({user,token})
+            
         } catch (error) {
             console.error(error.message);
             res.status(500).json(error.message);
