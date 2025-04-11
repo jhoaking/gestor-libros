@@ -44,7 +44,7 @@ export class usuarioModel{
         }
     }
 
-    static compararContra = async ({passwordUser, hashedPassword}) =>{
+    static compararContra = async (passwordUser, hashedPassword) =>{
         try {
             const comparePassword = bcrypt.compare(passwordUser, hashedPassword);
             return comparePassword;
@@ -61,20 +61,20 @@ export class usuarioModel{
             const query = 'SELECT BIN_TO_UUID(user_id) as id , email,password from usuarios WHERE email = ?';
 
             const [result] = await connection.query(query,[email]);
-            if(!result === 0){
+            if(result.length === 0){
                 return null;
             }
 
-            return result[0];
+            return result;
         } catch (error) {
             console.error(error.message);
-            throw new Error("error al comparar la password algo esta mal  ");
+            throw new Error("error al comparar el email  algo esta mal  ");
         }
     }
 
     static obtenerUsuario = async() =>{
         try {
-            const query = "SELECT BIN_TO_UUID(user_id)AS id , email,password FROM usuarios";
+            const query = "SELECT BIN_TO_UUID(user_id)AS id ,nombre,  email,password FROM usuarios";
             const [result] = await connection.query(query);
             return result;
         } catch (error) {

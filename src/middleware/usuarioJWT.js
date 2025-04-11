@@ -9,9 +9,11 @@ export const authenticate = async (req,res,next) =>{
         }
 
         const decoded = jwt.verify(token,SECRET_JWT_KEY);
+        console.log("asdasdasd",decoded);
+        
         req.user = decoded;
         next();
-    } catch (error) {
+    } catch (error) {  
         console.error(error.message);
         res.status(500).json({message: "token expirado"});
     }
