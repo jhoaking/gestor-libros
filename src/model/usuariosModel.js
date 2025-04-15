@@ -8,7 +8,7 @@ export class usuarioModel{
     static createToken =  (user) =>{
         try {
             const token = jwt.sign(
-                {id:user.user_id,nombre : user.nombre, email : user.email},
+                {id:user.id,nombre : user.nombre, email : user.email},
                 SECRET_JWT_KEY,
                 {expiresIn: "48h"}
             )

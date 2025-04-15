@@ -35,7 +35,7 @@ export class usuarioController{
             const {email,password} = vali.data;
 
             const user  = await usuarioModel.obtenerPorEmail(email);
-            
+            console.log('🧠 USER QUE LLEGA AL TOKEN:', user);
 
             if(!user){ 
                 return res.status(400).json({message: "necesitas registrarte primero"});
